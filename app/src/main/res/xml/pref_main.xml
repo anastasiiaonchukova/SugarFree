@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.anastasiiao.android.sugarfree.Utils.DatePreference
+        android:key="quit"
+        android:title="Change quit time"
+        android:summary="Current quit date: "/>
+</PreferenceScreen>
