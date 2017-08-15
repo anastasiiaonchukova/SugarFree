@@ -8,30 +8,38 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.io.Console;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.anastasiiao.android.sugarfree.R.*;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private TextView showTimePassed;
+    private SharedPreferences _sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
-        showTimePassed= (TextView) findViewById(id.text_view);
+        showTimePassed = (TextView) findViewById(id.text_view);
         setupSharedPreferences();
         setTitle(string.toolbar_header);
     }
 
     private void setupSharedPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        showTimePassed.setText(getString(string.no_eat_message)+" "+sharedPreferences.getString("quit_date", "0")+" days.");
+        this._sharedPreferences = sharedPreferences;
+        setTimePassed();
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         // Register the listener
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -68,8 +76,32 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        if (s.equals("quit_date")) {
-            showTimePassed.setText(getString(string.no_eat_message)+" "+sharedPreferences.getString("quit_date", "0")+" days.");
+        if (s.equals("quit")) {
+            setTimePassed();
         }
+    }
+
+    private void setTimePassed() {
+        showTimePassed.setText(getString(string.no_eat_message) + " " + calculateNumberOfDays() + " days.");
+    }
+
+    private String calculateNumberOfDays() {
+        String quitDate = _sharedPreferences.getString("quit", "0");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date d = null;
+        try {
+            d = formatter.parse(quitDate);//catch exception
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar thatDay = Calendar.getInstance();
+        thatDay.setTime(d);
+        Log.d("quitDate", quitDate);
+
+        Calendar today = Calendar.getInstance();
+
+        long diff = today.getTimeInMillis() - thatDay.getTimeInMillis();
+        long days = diff / (24 * 60 * 60 * 1000);
+        return String.valueOf(days);
     }
 }

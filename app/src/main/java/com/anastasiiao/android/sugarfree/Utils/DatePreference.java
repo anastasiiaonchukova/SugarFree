@@ -3,7 +3,6 @@ package com.anastasiiao.android.sugarfree.Utils;
 import android.content.Context;
 import android.support.v7.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.widget.DatePicker;
 
 
 public class DatePreference extends DialogPreference {
@@ -19,7 +18,7 @@ public class DatePreference extends DialogPreference {
     {
         try
         {
-            String[] time = value.split(":");
+            String[] time = value.split("/");
             return (Integer.parseInt(time[0]));
         }
         catch (Exception e)
@@ -32,7 +31,7 @@ public class DatePreference extends DialogPreference {
     {
         try
         {
-            String[] time = value.split(":");
+            String[] time = value.split("/");
             return (Integer.parseInt(time[1]));
         }
         catch (Exception e)
@@ -45,8 +44,8 @@ public class DatePreference extends DialogPreference {
     {
         try
         {
-            String[] time = value.split(":");
-            return (Integer.parseInt(time[1]));
+            String[] time = value.split("/");
+            return (Integer.parseInt(time[2]));
         }
         catch (Exception e)
         {
@@ -58,6 +57,7 @@ public class DatePreference extends DialogPreference {
     {
         return String.format("%02d", d) + "/" + String.format("%02d", m)+ "/" + String.format("%02d", y);
     }
+
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue)
     {

@@ -49,7 +49,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
     private void setPreferenceSummary(Preference preference, String value) {
         if (preference instanceof com.anastasiiao.android.sugarfree.Utils.DatePreference) {
-            preference.setSummary(value);
+            preference.setSummary(getString(R.string.current_quit_date)+" "+value);
         }
     }
 

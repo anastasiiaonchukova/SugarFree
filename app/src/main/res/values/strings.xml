@@ -4,4 +4,6 @@
     <string name="toolbar_header">Sugar Free</string>
     <string name="action_about">About</string>
     <string name="no_eat_message">You haven\'t been eating sweets for</string>
+    <string name="current_quit_date">Current quit date: </string>
+    <string name="change_quit_date">Change quit date</string>
 </resources>
