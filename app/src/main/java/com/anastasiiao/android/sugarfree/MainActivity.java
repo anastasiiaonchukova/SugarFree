@@ -5,22 +5,24 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import java.io.Console;
-import java.text.ParseException;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.NativeExpressAdView;
+
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
-import static com.anastasiiao.android.sugarfree.R.*;
+import static com.anastasiiao.android.sugarfree.R.id;
+import static com.anastasiiao.android.sugarfree.R.layout;
+import static com.anastasiiao.android.sugarfree.R.string;
 
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -34,6 +36,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         showTimePassed = (TextView) findViewById(id.text_view);
         setupSharedPreferences();
         setTitle(string.toolbar_header);
+        MobileAds.initialize(this,getString(R.string.adUnitId));
+        NativeExpressAdView adView = (NativeExpressAdView)findViewById(R.id.adView);
+
+        AdRequest request = new AdRequest.Builder().build();
+        adView.loadAd(request);
     }
 
     private void setupSharedPreferences() {
@@ -66,9 +73,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
                 Intent intentSettings = new Intent(this, SettingsActivity.class);
                 startActivity(intentSettings);
                 return true;
-            case R.id.action_about:
-                Intent intentAbout = new Intent(this, AboutActivity.class);
-                startActivity(intentAbout);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -82,26 +86,40 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void setTimePassed() {
-        showTimePassed.setText(getString(string.no_eat_message) + " " + calculateNumberOfDays() + " days.");
+        showTimePassed.setText(getString(R.string.no_eat_message) + " " + calculateNumberOfDays());
     }
 
     private String calculateNumberOfDays() {
+        Date d1;
+        Date d2;
+        String resultDiff = "";
         String quitDate = _sharedPreferences.getString("quit", "0");
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date d = null;
+        String todayDate = formatter.format(new Date());
+
         try {
-            d = formatter.parse(quitDate);//catch exception
-        } catch (ParseException e) {
+            d1 = formatter.parse(quitDate);
+            d2 = formatter.parse(todayDate);
+
+            DateTime dt1 = new DateTime(d1);
+            DateTime dt2 = new DateTime(d2);
+            Period p = new Period(dt1, dt2, PeriodType.yearMonthDayTime());
+            int yearsBetween = p.getYears();
+            int monthBetween = p.getMonths();
+            int daysBetween = p.getDays();
+            if (yearsBetween != 0) {
+                resultDiff = yearsBetween + " Y ";
+            }
+            if (monthBetween != 0) {
+                resultDiff += monthBetween + " M ";
+            }
+            resultDiff += daysBetween + " D.";
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        Calendar thatDay = Calendar.getInstance();
-        thatDay.setTime(d);
-        Log.d("quitDate", quitDate);
 
-        Calendar today = Calendar.getInstance();
+        return resultDiff;
 
-        long diff = today.getTimeInMillis() - thatDay.getTimeInMillis();
-        long days = diff / (24 * 60 * 60 * 1000);
-        return String.valueOf(days);
     }
 }

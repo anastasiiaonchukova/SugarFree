@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        card_view:cardCornerRadius="4dp"
-        android:layout_margin="@dimen/card_margin">
+        android:layout_margin="@dimen/card_margin"
+        card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -20,9 +22,9 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="250dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/raspberries" />
+                android:src="@drawable/ananas" />
 
             <TextView
                 android:id="@+id/text_view"
@@ -30,8 +32,16 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageView"
                 android:layout_centerInParent="true"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/backdrop_subtitle" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/backdrop_title" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
+
+    <com.google.android.gms.ads.NativeExpressAdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="280x90"
+        ads:adUnitId="@string/adUnitId" />
+
 </LinearLayout>

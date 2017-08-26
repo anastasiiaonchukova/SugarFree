@@ -3,4 +3,17 @@
     <com.anastasiiao.android.sugarfree.Utils.DatePreference
         android:key="quit"
         android:title="@string/change_quit_date" />
+    <PreferenceScreen
+        android:key="money_spent_data"
+        android:title="@string/money_spent_title">
+        <ListPreference
+            android:defaultValue="PLN"
+            android:key="currency"
+            android:entries="@array/currencies"
+            android:entryValues="@array/currencies"
+            android:title="@string/money_spent_currency_title" />
+        <EditTextPreference
+            android:key="currency"
+            android:title="@string/money_spent_amount_title" />
+    </PreferenceScreen>
 </PreferenceScreen>
